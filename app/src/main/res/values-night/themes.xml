@@ -1,7 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.TripShopKorea" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.TripShopKorea" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="actionMenuTextColor">#FFFFFF</item>
+    </style>
+    <style name="RecyclerViewDarkMode" parent="@style/Widget.AppCompat.ListView">
+        <item name="android:background">#000000</item>
     </style>
 </resources>
