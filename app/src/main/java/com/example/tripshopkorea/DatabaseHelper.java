@@ -66,17 +66,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-   /* public boolean updateData(String id, String group,  String description) {
+    public boolean updateData(String id, String name, String group,  String description) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_1, id);
-        contentValues.put(COL_2, group);
-        contentValues.put(COL_3, description);
+        contentValues.put(DatabaseHelper.COL_2, name);
+        contentValues.put(DatabaseHelper.COL_3, group);
+        contentValues.put(DatabaseHelper.COL_4, description);
 
         db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
         return true;
-    }*/
+    }
 
     public Integer deleteData(String id) {
         SQLiteDatabase db = this.getWritableDatabase();

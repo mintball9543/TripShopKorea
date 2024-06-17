@@ -48,5 +48,9 @@ dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.1.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.android.material:material:1.4.0")
+    //gemini
+    implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
+    implementation("com.google.guava:guava:31.0.1-android")
+    implementation("org.reactivestreams:reactive-streams:1.0.4")
 //    implementation("com.google.cloud:google-cloud-translate:2.43.0")
 }

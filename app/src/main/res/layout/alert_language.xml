@@ -21,13 +21,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <TextView
+    <!--<TextView
         android:id="@+id/text_show_item"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="아이템"
-        android:textSize="20sp" />
+        android:textSize="20sp" />-->
 
 </LinearLayout>

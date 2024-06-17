@@ -1,8 +1,10 @@
 package com.example.tripshopkorea;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.example.tripshopkorea.databinding.ActSecondBinding;
@@ -30,29 +32,51 @@ public class ProductInfoFetcher {
                 String productName = getProductName(code);
                 String productGroup = getProductGroup(code);
 
+                // SharedPreferences에서 languageCode 가져오기
+                SharedPreferences sharedPref = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+                String languageCode = sharedPref.getString("languageCode", "en"); // Default is English
+
+                // 상품명 번역
+                Translation translation = new Translation();
+                translation.translateText(new TranslationCallback() {
+                    @Override
+                    public void onSuccess(String translatedText) {
+                        // Update the product name with the translated text
+                        handler.post(() -> binding.tvName.setText(translatedText));
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        // Handle failure
+                    }
+                }, productName, languageCode);
+
+                // 상품 카테고리 번역
+                translation.translateText(new TranslationCallback() {
+                    @Override
+                    public void onSuccess(String translatedText) {
+                        // Update the product group with the translated text
+                        handler.post(() -> binding.tvGroup.setText(translatedText));
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        // Handle failure
+                    }
+                }, productGroup, languageCode);
+
                 handler.post(() -> {
-                            Glide.with(context)
-                                    .load(imgurl)
-                                    .into(binding.imageView);
-                            binding.imageurl.setText(imgurl);
-                            binding.tvBarcode.setText(code);
-                            binding.tvName.setText(productName);
-                            binding.tvGroup.setText(productGroup);
+                    Glide.with(context)
+                            .load(imgurl)
+                            .into(binding.imageView);
+                    binding.imageurl.setText(imgurl);
+                    binding.tvBarcode.setText(code);
                 });
 
                 ProductDescription productDescription = new ProductDescription();
-                productDescription.getProductDescription(productName, productGroup,new ProductDescriptionHandler(binding));
+                productDescription.getProductDescription(productName, productGroup, new ProductDescriptionHandler(binding, context));
 
-//                secondFragment.updateUI(imgurl, code, productName, productGroup, productDescription);
-//                saveProductInfo(code, productName, productGroup, productDescription);
-//                resultStr = getResultFromApi(code).toString();
-//                Log.i("resultStr", resultStr);
-                // UI 업데이트는 UI 스레드에서 실행
-//                handler.post(() -> {
-//                    // txtProductName.setText(resultStr); // 예시: UI 업데이트
-//                });
             } catch (Exception e) {
-//                resultStr = e.getMessage();
                 e.printStackTrace();
             }
         });
@@ -81,7 +105,8 @@ public class ProductInfoFetcher {
 
         if (!productGroup.trim().isEmpty()) {
             productGroup = productGroup.substring(productGroup.indexOf(" "));
-            return productGroup.trim();
+//            Log.i("productGroup", productGroup.toString());
+            return productGroup.trim().toString();
         } else {
             return "검색 결과 없음"; // errMsg
         }

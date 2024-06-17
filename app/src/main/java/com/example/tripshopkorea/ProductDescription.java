@@ -12,7 +12,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ProductDescription {
-    private static final String TAG = "ProductInfoFetcher";
+    private static final String TAG = "ProductDescription";
     private final OpenAIService service;
 
     public ProductDescription() {
