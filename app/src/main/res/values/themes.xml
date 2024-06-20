@@ -5,6 +5,7 @@
 <!--         <item name="colorPrimary">@color/colorPrimary</item> -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorOnSurface">#000000</item>
     </style>
 
     <style name="Theme.TripShopKorea" parent="Base.Theme.TripShopKorea" />
