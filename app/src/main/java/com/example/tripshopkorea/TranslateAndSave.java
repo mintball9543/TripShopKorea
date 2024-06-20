@@ -3,6 +3,7 @@ package com.example.tripshopkorea;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -22,6 +23,11 @@ public class TranslateAndSave extends AsyncTask<Void, Void, Void> {
         this.group = group;
         this.description = description;
         this.languageCode = languageCode;
+    }
+
+    protected  void onPreExecute() {
+        super.onPreExecute();
+        mainActivity.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -92,5 +98,6 @@ public class TranslateAndSave extends AsyncTask<Void, Void, Void> {
         boolean isUpdated = db.updateData(id, name[0], group[0], description[0]);
         Log.i("DB update", "Updated: " + isUpdated);
         mainActivity.loadRecyclerViewData();
+        mainActivity.findViewById(R.id.progressBar).setVisibility(View.GONE);
     }
 }
