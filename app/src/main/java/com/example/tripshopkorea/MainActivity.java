@@ -301,68 +301,10 @@ public class MainActivity extends AppCompatActivity {
                         final String[] description = {res.getString(3)};
 
                         Log.i("DB get data", id + " " + name[0] + " " + group[0] + " " + description[0]);
-                        /*// 번역 객체 생성
-                        Translation translation = new Translation();
-                        final CountDownLatch latch = new CountDownLatch(3);
 
-                        // 상품명 번역
-                        translation.translateText(new TranslationCallback() {
-                            @Override
-                            public void onSuccess(String translatedText) {
-                                name[0] = translatedText;
-                                latch.countDown();
-                            }
-
-                            @Override
-                            public void onFailure(Throwable t) {
-                                // Handle failure
-                                latch.countDown();
-                            }
-                        }, name[0], languageCode);
-
-                        // 카테고리 번역
-                        translation.translateText(new TranslationCallback() {
-                            @Override
-                            public void onSuccess(String translatedText) {
-                                group[0] = translatedText;
-                                latch.countDown();
-                            }
-
-                            @Override
-                            public void onFailure(Throwable t) {
-                                // Handle failure
-                                latch.countDown();
-                            }
-                        }, group[0], languageCode);
-
-                        // 설명 번역
-                        translation.translateText(new TranslationCallback() {
-                            @Override
-                            public void onSuccess(String translatedText) {
-                                description[0] = translatedText;
-                                latch.countDown();
-                            }
-
-                            @Override
-                            public void onFailure(Throwable t) {
-                                // Handle failure
-                                latch.countDown();
-                            }
-                        }, description[0], languageCode);
-
-                        // 번역 완료까지 대기
-                        try {
-                            latch.await();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }*/
 
                         // DB 업데이트
                         new TranslateAndSave(MainActivity.this, id, name, group, description, languageCode).execute();
-                        /*db = new DatabaseHelper(MainActivity.this);
-                        boolean isUpdated = db.updateData(id, name[0], group[0], description[0]);
-                        Log.i("DB update", "Updated: " + isUpdated);*/
-
                     }
                     res.close();
 

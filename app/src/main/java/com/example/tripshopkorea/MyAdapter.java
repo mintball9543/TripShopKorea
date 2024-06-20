@@ -51,7 +51,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         holder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(mycontext, mDataset.get(newpos).title, Toast.LENGTH_SHORT).show();
                 String barcode = mDataset.get(newpos).barcode;
                 String name = mDataset.get(newpos).name;
                 String url = mDataset.get(newpos).imageURL;
@@ -75,7 +74,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-//        return 3;
           return mDataset.size();
     }
 

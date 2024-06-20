@@ -61,43 +61,10 @@ public class ProductDescription {
                 callback.onFailure(new IOException("API 요청 중 에러 발생", t));
             }
         });
-        /*Response<ApiResponse> response = service.getCompletion(request).execute();
-
-        if (response.isSuccessful() && response.body() != null) {
-            String description = response.body().choices.get(0).message.content.trim();
-            Log.i(TAG, "상품 설명: " + description);
-            return description;
-        } else {
-            Log.e(TAG, "API 요청 실패: " + response.message());
-            if(response.errorBody() != null){
-                Log.e(TAG, "Error body: " + response.errorBody().string());
-            }
-            throw new IOException("API 요청 실패: " + response.message());
-        }*/
     }
 
     public interface ProductDescriptionCallback {
         void onSuccess(String description);
         void onFailure(Exception e);
     }
-    /*public void getProductDescription(String productName) {
-        ApiRequest request = new ApiRequest("text-davinci-003", "상품 이름: " + productName + "\n상품 설명:", 100);
-
-        service.getCompletion(request).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    String description = response.body().choices.get(0).text.trim();
-                    Log.i(TAG, "상품 설명: " + description);
-                } else {
-                    Log.e(TAG, "API 요청 실패: " + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e(TAG, "API 요청 중 에러 발생", t);
-            }
-        });
-    }*/
 }

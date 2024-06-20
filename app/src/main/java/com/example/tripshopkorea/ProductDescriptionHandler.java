@@ -16,7 +16,6 @@ public class ProductDescriptionHandler implements ProductDescription.ProductDesc
 
     @Override
     public void onSuccess(String description) {
-//       binding.tvDescription.setText(description);
         // SharedPreferences에서 languageCode 가져오기
         SharedPreferences sharedPref = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         String languageCode = sharedPref.getString("languageCode", "en"); // Default is English
