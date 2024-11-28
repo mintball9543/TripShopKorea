@@ -385,7 +385,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void startBarcodeScan() {
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setPrompt("Scan a barcode");
+        integrator.setPrompt("Scan a Image");
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setOrientationLocked(false);
         integrator.initiateScan();
     }
