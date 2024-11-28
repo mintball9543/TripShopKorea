@@ -83,32 +83,17 @@ public class ProductInfoFetcher {
     }
 
     private String getImageUrl(String code) throws Exception {
-        String imgurl = Jsoup.connect(url + code).timeout(1000 * 10).get().select("div.img_col img").attr("src");
-        if (!imgurl.trim().isEmpty()) {
-            return imgurl.trim();
-        } else {
-            return "검색 결과 없음"; // errMsg
-        }
+        Crawler crawler = ClawlingFactory.getClawler(code);
+        return crawler.ImageUrlCrawler(code);
     }
 
     private String getProductName(String code) throws Exception {
-        String productName = Jsoup.connect(url + code).timeout(1000 * 10).get().select("div.nm").text();
-        if (!productName.trim().isEmpty()) {
-            return productName.trim();
-        } else {
-            return "검색 결과 없음"; // errMsg
-        }
+        Crawler crawler = ClawlingFactory.getClawler(code);
+        return crawler.ProductNameCrawler(code);
     }
 
     private String getProductGroup(String code) throws Exception {
-        String productGroup = Jsoup.connect(url + code).timeout(1000 * 10).get().select("div.field:contains(KAN 상품분류) div.td").text();
-
-        if (!productGroup.trim().isEmpty()) {
-            productGroup = productGroup.substring(productGroup.indexOf(" "));
-//            Log.i("productGroup", productGroup.toString());
-            return productGroup.trim().toString();
-        } else {
-            return "검색 결과 없음"; // errMsg
-        }
+        Crawler crawler = ClawlingFactory.getClawler(code);
+        return crawler.ProductGroupCrawler(code);
     }
 }
