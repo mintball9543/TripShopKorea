@@ -25,9 +25,7 @@ public class SecondAct extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        //db = new DatabaseHelper(this);
         db= DatabaseHelper.getInstance(this);
-        //db.addObserver(this);
 
         // ProductInfoFetcher 초기화
         pif = new ProductInfoFetcher(this);
@@ -45,7 +43,6 @@ public class SecondAct extends AppCompatActivity {
             else{
                 updateUIFromIntent(intent);
             }
-
         }
 
         binding.swCart.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
@@ -69,8 +66,6 @@ public class SecondAct extends AppCompatActivity {
             }
         });
     }
-
-
 
     @Override
     protected void onDestroy() {

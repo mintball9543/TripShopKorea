@@ -7,7 +7,6 @@ import android.util.Log;
 public class ObserverLog {
     static DatabaseHelper db;
 
-    // Constructor to accept Context
     public ObserverLog(Context context) {
         db = DatabaseHelper.getInstance(context);
     }

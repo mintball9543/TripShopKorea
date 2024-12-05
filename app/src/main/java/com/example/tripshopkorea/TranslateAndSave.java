@@ -97,8 +97,6 @@ public class TranslateAndSave extends AsyncTask<Void, Void, Void> {
         DatabaseHelper db = DatabaseHelper.getInstance(mainActivity);
         boolean isUpdated = db.updateData(id, name[0], group[0], description[0]);
         Log.i("DB update", "Updated: " + isUpdated);
-//        mainActivity.loadRecyclerViewData();
-//        db.notifyObservers();
         mainActivity.findViewById(R.id.progressBar).setVisibility(View.GONE);
     }
 }

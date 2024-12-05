@@ -70,12 +70,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
         }
         return false;
-
-
-        /*if (result == -1)
-            return false;
-        else
-            return true;*/
     }
 
     public Cursor getAllData() {
@@ -97,7 +91,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(rowAffected > 0)
             notifyObservers();
         return rowAffected > 0;
-        //        return true;
     }
 
     public Integer deleteData(String id) {
