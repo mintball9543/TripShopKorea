@@ -17,7 +17,7 @@ public class ProductDescription {
     private static final String TAG = "ProductDescription err";
     private final OpenAIService service;
 
-    public ProductDescription() {
+    private ProductDescription() {
 
 //        String apiKey = System.getenv("OPENAI_API_KEY"); // API 키를 환경 변수에서 가져오기
         String apiKey = ""; // API 키를 직접 입력
@@ -30,9 +30,8 @@ public class ProductDescription {
     public static ProductDescription getInstance() {
         if (instance == null) {
             synchronized (ProductDescription.class) { // 스레드 안전성 확보
-                if (instance == null) {
+                if (instance == null)
                     instance = new ProductDescription();
-                }
             }
         }
         return instance;
