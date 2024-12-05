@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME + " (ID INTEGER PRIMARY KEY, NAME TEXT, GROUPS TEXT, DESCRIPTION TEXT, IMG TEXT)");
+        db.execSQL("create table " + TABLE_NAME + " (ID TEXT PRIMARY KEY, NAME TEXT, GROUPS TEXT, DESCRIPTION TEXT, IMG TEXT)");
     }
 
     @Override
@@ -44,20 +45,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addObserver(DatabaseObserver observer){
-        observers.add(observer);
-    }
-
-    public void removeObservers(DatabaseObserver observer){
-        observers.remove(observer);
-    }
-
-    private void  notifyObservers(){
-        for(DatabaseObserver observer : observers){
-            observer.onDatabaseChanged();
-        }
-    }
-
     public boolean insertData(String id, String name, String group, String description, String img_url) {
         Log.i("DatabaseHelper", "insertData: " + id + " " + name + " " + group + " " + description);
         SQLiteDatabase db = this.getWritableDatabase();
@@ -70,11 +57,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_5, img_url);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
-        if (result == -1) {
+        if(result != -1) {
             notifyObservers();
-            return false;
-        }else
             return true;
+        }
+        return false;
+
+
+        /*if (result == -1)
+            return false;
+        else
+            return true;*/
     }
 
     public Cursor getAllData() {
@@ -92,20 +85,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseHelper.COL_3, group);
         contentValues.put(DatabaseHelper.COL_4, description);
 
-        int result = db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
-        if(result>0){
+        int rowAffected = db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
+        if(rowAffected > 0)
             notifyObservers();
-            return true;
-        }
-        return false;
+        return rowAffected > 0;
+        //        return true;
     }
 
     public Integer deleteData(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        int result=  db.delete(TABLE_NAME, "ID = ?", new String[]{id});
-        if(result >0){
+        int rowDeleted = db.delete(TABLE_NAME, "ID = ?", new String[]{id});
+        if(rowDeleted > 0)
             notifyObservers();
+        return rowDeleted;
+    }
+
+    public void addObserver(DatabaseObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(DatabaseObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        for(DatabaseObserver observer : observers) {
+            observer.onDatabaseUpdated();
         }
-        return result;
     }
 }

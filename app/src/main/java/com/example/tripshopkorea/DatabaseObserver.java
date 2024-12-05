@@ -1,5 +1,5 @@
 package com.example.tripshopkorea;
 
 public interface DatabaseObserver {
-    void onDatabaseChanged();
+    void onDatabaseUpdated();
 }

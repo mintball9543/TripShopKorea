@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-public class MainActivity extends AppCompatActivity implements DatabaseObserver {
+public class MainActivity extends AppCompatActivity implements DatabaseObserver{
 
     FloatingActionButton fab;
     DatabaseHelper db;
@@ -52,13 +52,13 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        db = new DatabaseHelper(this);
-        db.addObserver(this);
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        db = new DatabaseHelper(this);
+        db.addObserver(this);
         loadRecyclerViewData();
 
         fab = findViewById(R.id.fab);
@@ -94,16 +94,6 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver 
             }
         });*/
 
-    }
-    @Override
-    public void onDatabaseChanged(){
-        runOnUiThread(this::loadRecyclerViewData);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        db.removeObservers(this); // 옵저버 해제
     }
 
     @Override
@@ -347,10 +337,6 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("onActivityResult", String.valueOf(requestCode));
-        /*if (requestCode == 1) {
-            loadRecyclerViewData();
-            return;
-        }*/
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
@@ -374,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver 
         }
     }
 
-    /*public void loadRecyclerViewData() {
+    public void loadRecyclerViewData() {
 
 
         recyclerView.setHasFixedSize(true);
@@ -382,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver 
         ArrayList<PaintTitle> myDataset = new ArrayList<PaintTitle>();
 
         // 아이템 추가
-        db = new DatabaseHelper(this);
+//        db = new DatabaseHelper(this);
         Cursor res = db.getAllData();
 
         while (res.moveToNext()) {
@@ -393,26 +379,10 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver 
 
 
         recyclerView.setAdapter(new MyAdapter(myDataset));
-    }*/
 
-    public void loadRecyclerViewData() {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        ArrayList<PaintTitle> myDataset = new ArrayList<>();
-
-        Cursor res = db.getAllData();
-        while (res.moveToNext()) {
-            myDataset.add(new PaintTitle(
-                    res.getString(4), // 이미지 URL
-                    res.getString(0), // ID
-                    res.getString(1), // 이름
-                    res.getString(2), // 그룹
-                    res.getString(3)  // 설명
-            ));
-        }
-        res.close();
-
-        recyclerView.setAdapter(new MyAdapter(myDataset));
+        Log.i("loadRecyclerViewData", "loadRecyclerViewData=================>");
+        ObserverLog observerLog = new ObserverLog(this);
+        observerLog.print_log();
     }
 
     private void startBarcodeScan() {
@@ -421,5 +391,17 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver 
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setOrientationLocked(false);
         integrator.initiateScan();
+    }
+
+    @Override
+    public void onDatabaseUpdated() {
+//        runOnUiThread(this::loadRecyclerViewData);
+        loadRecyclerViewData();
+        Log.i("onDatabaseUpdated", "Observer Pattern=================>");
+    }
+
+    public void onResume() {
+        super.onResume();
+        onDatabaseUpdated();
     }
 }
