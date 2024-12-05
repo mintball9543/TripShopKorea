@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DatabaseObserver {
 
     FloatingActionButton fab;
     DatabaseHelper db;
@@ -52,9 +52,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        db = new DatabaseHelper(this);
+        db.addObserver(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         loadRecyclerViewData();
@@ -92,6 +94,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
+    }
+    @Override
+    public void onDatabaseChanged(){
+        runOnUiThread(this::loadRecyclerViewData);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.removeObservers(this); // 옵저버 해제
     }
 
     @Override
@@ -335,10 +347,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("onActivityResult", String.valueOf(requestCode));
-        if (requestCode == 1) {
+        /*if (requestCode == 1) {
             loadRecyclerViewData();
             return;
-        }
+        }*/
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
@@ -362,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void loadRecyclerViewData() {
+    /*public void loadRecyclerViewData() {
 
 
         recyclerView.setHasFixedSize(true);
@@ -379,6 +391,26 @@ public class MainActivity extends AppCompatActivity {
         }
         res.close();
 
+
+        recyclerView.setAdapter(new MyAdapter(myDataset));
+    }*/
+
+    public void loadRecyclerViewData() {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ArrayList<PaintTitle> myDataset = new ArrayList<>();
+
+        Cursor res = db.getAllData();
+        while (res.moveToNext()) {
+            myDataset.add(new PaintTitle(
+                    res.getString(4), // 이미지 URL
+                    res.getString(0), // ID
+                    res.getString(1), // 이름
+                    res.getString(2), // 그룹
+                    res.getString(3)  // 설명
+            ));
+        }
+        res.close();
 
         recyclerView.setAdapter(new MyAdapter(myDataset));
     }

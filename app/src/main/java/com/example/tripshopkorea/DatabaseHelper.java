@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -18,6 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_4 = "DESCRIPTION";
     public static final String COL_5 = "IMG";
 
+    private List<DatabaseObserver> observers = new ArrayList<>();
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -41,6 +44,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addObserver(DatabaseObserver observer){
+        observers.add(observer);
+    }
+
+    public void removeObservers(DatabaseObserver observer){
+        observers.remove(observer);
+    }
+
+    private void  notifyObservers(){
+        for(DatabaseObserver observer : observers){
+            observer.onDatabaseChanged();
+        }
+    }
+
     public boolean insertData(String id, String name, String group, String description, String img_url) {
         Log.i("DatabaseHelper", "insertData: " + id + " " + name + " " + group + " " + description);
         SQLiteDatabase db = this.getWritableDatabase();
@@ -53,9 +70,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_5, img_url);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
-        if (result == -1)
+        if (result == -1) {
+            notifyObservers();
             return false;
-        else
+        }else
             return true;
     }
 
@@ -74,12 +92,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseHelper.COL_3, group);
         contentValues.put(DatabaseHelper.COL_4, description);
 
-        db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
-        return true;
+        int result = db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
+        if(result>0){
+            notifyObservers();
+            return true;
+        }
+        return false;
     }
 
     public Integer deleteData(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME, "ID = ?", new String[]{id});
+        int result=  db.delete(TABLE_NAME, "ID = ?", new String[]{id});
+        if(result >0){
+            notifyObservers();
+        }
+        return result;
     }
 }

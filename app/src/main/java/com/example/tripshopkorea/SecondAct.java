@@ -12,11 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.tripshopkorea.databinding.ActSecondBinding;
 
-public class SecondAct extends AppCompatActivity {
+public class SecondAct extends AppCompatActivity implements DatabaseObserver{
 
     ActSecondBinding binding;
     ProductInfoFetcher pif;
     DatabaseHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +26,7 @@ public class SecondAct extends AppCompatActivity {
         setContentView(view);
 
         db = new DatabaseHelper(this);
+        db.addObserver(this);
 
         // ProductInfoFetcher 초기화
         pif = new ProductInfoFetcher(this);
@@ -40,7 +42,7 @@ public class SecondAct extends AppCompatActivity {
             }
             // db 저장된 데이터를 불러올 때
             else{
-                String imgurl = intent.getStringExtra("url");
+                /*String imgurl = intent.getStringExtra("url");
                 String barcodeNumber = intent.getStringExtra("barcodeNumber");
                 String name = intent.getStringExtra("name");
                 String group = intent.getStringExtra("group");
@@ -54,7 +56,8 @@ public class SecondAct extends AppCompatActivity {
                 binding.tvGroup.setText(group);
                 binding.tvDescription.setText(detail_msg);
 
-                binding.swCart.setChecked(true);
+                binding.swCart.setChecked(true);*/
+                updateUIFromIntent(intent);
             }
 
         }
@@ -76,9 +79,33 @@ public class SecondAct extends AppCompatActivity {
     }
 
     @Override
+    public void onDatabaseChanged() {
+        runOnUiThread(() -> {
+            // 필요한 경우 UI 갱신
+        });
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        db.removeObservers(this);
         Intent intent = new Intent();
         setResult(Activity.RESULT_OK, intent);
+    }
+
+    private void updateUIFromIntent(Intent intent) {
+        String imgurl = intent.getStringExtra("url");
+        String barcodeNumber = intent.getStringExtra("barcodeNumber");
+        String name = intent.getStringExtra("name");
+        String group = intent.getStringExtra("group");
+        String detail_msg = intent.getStringExtra("detail_msg");
+
+        Glide.with(this).load(imgurl).into(binding.imageView);
+        binding.tvBarcode.setText(barcodeNumber);
+        binding.tvName.setText(name);
+        binding.tvGroup.setText(group);
+        binding.tvDescription.setText(detail_msg);
+
+        binding.swCart.setChecked(true);
     }
 }
