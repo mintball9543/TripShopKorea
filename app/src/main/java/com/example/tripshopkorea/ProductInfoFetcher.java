@@ -37,7 +37,7 @@ public class ProductInfoFetcher {
                 String languageCode = sharedPref.getString("languageCode", "en"); // Default is English
 
                 // 상품명 번역
-                Translation translation = new Translation();
+                Translation translation = Translation.getInstance();
                 translation.translateText(new TranslationCallback() {
                     @Override
                     public void onSuccess(String translatedText) {

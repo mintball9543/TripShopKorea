@@ -21,7 +21,7 @@ public class ProductDescriptionHandler implements ProductDescription.ProductDesc
         String languageCode = sharedPref.getString("languageCode", "en"); // Default is English
 
         // 번역 객체 생성
-        Translation translation = new Translation();
+        Translation translation = Translation.getInstance();
         translation.translateText(new TranslationCallback() {
             @Override
             public void onSuccess(String translatedText) {

@@ -11,6 +11,7 @@ import retrofit2.Response;
 
 public class Translation {
 
+    public static Translation instance;
     TranslateService service;
     private String apiKey = ""; // API 키를 직접 입력
 
@@ -21,6 +22,16 @@ public class Translation {
 
         service = retrofit.create(TranslateService.class);
 
+    }
+
+    public static Translation getInstance() {
+        if (instance == null) {
+            synchronized (Translation.class) { // 스레드 안전성
+                if (instance == null)
+                    instance = new Translation();
+            }
+        }
+        return instance;
     }
 
     public void translateText(TranslationCallback callback, String text, String languageCode) {

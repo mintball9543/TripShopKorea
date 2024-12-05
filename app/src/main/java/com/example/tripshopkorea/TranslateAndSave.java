@@ -14,7 +14,7 @@ public class TranslateAndSave extends AsyncTask<Void, Void, Void> {
     private String[] description;
     private String languageCode;
     private MainActivity mainActivity;
-    Translation translation = new Translation();
+    Translation translation = Translation.getInstance();
 
     public TranslateAndSave(MainActivity mainActivity, String id, String[] name, String[] group, String[] description, String languageCode) {
         this.mainActivity = mainActivity;
