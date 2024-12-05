@@ -15,7 +15,7 @@ public class Translation {
     TranslateService service;
     private String apiKey = ""; // API 키를 직접 입력
 
-    public Translation(){
+    private Translation(){
 
         String baseUrl = "https://translation.googleapis.com/";
         Retrofit retrofit = RetrofitClient.getClient(baseUrl);
