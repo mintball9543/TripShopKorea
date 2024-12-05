@@ -12,6 +12,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ProductDescription {
+
+    public static ProductDescription instance;
     private static final String TAG = "ProductDescription err";
     private final OpenAIService service;
 
@@ -23,6 +25,17 @@ public class ProductDescription {
         Retrofit retrofit = RetrofitClient.getClient(baseUrl, apiKey);
 
         service = retrofit.create(OpenAIService.class);
+    }
+
+    public static ProductDescription getInstance() {
+        if (instance == null) {
+            synchronized (ProductDescription.class) { // 스레드 안전성 확보
+                if (instance == null) {
+                    instance = new ProductDescription();
+                }
+            }
+        }
+        return instance;
     }
 
     public void getProductDescription(String productName, String category, final ProductDescriptionCallback callback) throws IOException {

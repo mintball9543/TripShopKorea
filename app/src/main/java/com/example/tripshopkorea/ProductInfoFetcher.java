@@ -73,7 +73,7 @@ public class ProductInfoFetcher {
                     binding.tvBarcode.setText(code);
                 });
 
-                ProductDescription productDescription = new ProductDescription();
+                ProductDescription productDescription = ProductDescription.getInstance();
                 productDescription.getProductDescription(productName, productGroup, new ProductDescriptionHandler(binding, context));
 
             } catch (Exception e) {
