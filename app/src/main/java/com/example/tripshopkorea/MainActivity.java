@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DatabaseObserver{
 
     FloatingActionButton fab;
     DatabaseHelper db;
@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        db = new DatabaseHelper(this);
+        db.addObserver(this);
         loadRecyclerViewData();
 
         fab = findViewById(R.id.fab);
@@ -335,10 +337,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("onActivityResult", String.valueOf(requestCode));
-        if (requestCode == 1) {
-            loadRecyclerViewData();
-            return;
-        }
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
@@ -370,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<PaintTitle> myDataset = new ArrayList<PaintTitle>();
 
         // 아이템 추가
-        db = new DatabaseHelper(this);
+//        db = new DatabaseHelper(this);
         Cursor res = db.getAllData();
 
         while (res.moveToNext()) {
@@ -381,6 +379,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         recyclerView.setAdapter(new MyAdapter(myDataset));
+
+        Log.i("loadRecyclerViewData", "loadRecyclerViewData=================>");
+        ObserverLog observerLog = new ObserverLog(this);
+        observerLog.print_log();
     }
 
     private void startBarcodeScan() {
@@ -389,5 +391,17 @@ public class MainActivity extends AppCompatActivity {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setOrientationLocked(false);
         integrator.initiateScan();
+    }
+
+    @Override
+    public void onDatabaseUpdated() {
+//        runOnUiThread(this::loadRecyclerViewData);
+        loadRecyclerViewData();
+        Log.i("onDatabaseUpdated", "Observer Pattern=================>");
+    }
+
+    public void onResume() {
+        super.onResume();
+        onDatabaseUpdated();
     }
 }

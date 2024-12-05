@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -18,6 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_4 = "DESCRIPTION";
     public static final String COL_5 = "IMG";
 
+    private List<DatabaseObserver> observers = new ArrayList<>();
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -53,10 +57,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_5, img_url);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
-        if (result == -1)
+        if(result != -1) {
+            notifyObservers();
+            return true;
+        }
+        return false;
+
+
+        /*if (result == -1)
             return false;
         else
-            return true;
+            return true;*/
     }
 
     public Cursor getAllData() {
@@ -74,12 +85,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(DatabaseHelper.COL_3, group);
         contentValues.put(DatabaseHelper.COL_4, description);
 
-        db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
-        return true;
+        int rowAffected = db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id});
+        if(rowAffected > 0)
+            notifyObservers();
+        return rowAffected > 0;
+        //        return true;
     }
 
     public Integer deleteData(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME, "ID = ?", new String[]{id});
+        int rowDeleted = db.delete(TABLE_NAME, "ID = ?", new String[]{id});
+        if(rowDeleted > 0)
+            notifyObservers();
+        return rowDeleted;
+    }
+
+    public void addObserver(DatabaseObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(DatabaseObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        for(DatabaseObserver observer : observers) {
+            observer.onDatabaseUpdated();
+        }
     }
 }
