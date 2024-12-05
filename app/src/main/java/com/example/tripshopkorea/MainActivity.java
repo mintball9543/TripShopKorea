@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver{
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        db = new DatabaseHelper(this);
+        db = DatabaseHelper.getInstance(this);
         db.addObserver(this);
         loadRecyclerViewData();
 
@@ -395,13 +395,8 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver{
 
     @Override
     public void onDatabaseUpdated() {
-//        runOnUiThread(this::loadRecyclerViewData);
         loadRecyclerViewData();
         Log.i("onDatabaseUpdated", "Observer Pattern=================>");
     }
 
-    public void onResume() {
-        super.onResume();
-        onDatabaseUpdated();
-    }
 }

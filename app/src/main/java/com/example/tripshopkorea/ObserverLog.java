@@ -9,7 +9,7 @@ public class ObserverLog {
 
     // Constructor to accept Context
     public ObserverLog(Context context) {
-        db = new DatabaseHelper(context);
+        db = DatabaseHelper.getInstance(context);
     }
 
     //db 모두 출력하기

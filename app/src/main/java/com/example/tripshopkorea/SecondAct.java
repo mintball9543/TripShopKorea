@@ -26,7 +26,7 @@ public class SecondAct extends AppCompatActivity {
         setContentView(view);
 
         //db = new DatabaseHelper(this);
-        db= new DatabaseHelper(this);
+        db= DatabaseHelper.getInstance(this);
         //db.addObserver(this);
 
         // ProductInfoFetcher 초기화

@@ -94,10 +94,11 @@ public class TranslateAndSave extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
 
         // DB 업데이트
-        DatabaseHelper db = new DatabaseHelper(mainActivity);
+        DatabaseHelper db = DatabaseHelper.getInstance(mainActivity);
         boolean isUpdated = db.updateData(id, name[0], group[0], description[0]);
         Log.i("DB update", "Updated: " + isUpdated);
-        mainActivity.loadRecyclerViewData();
+//        mainActivity.loadRecyclerViewData();
+//        db.notifyObservers();
         mainActivity.findViewById(R.id.progressBar).setVisibility(View.GONE);
     }
 }
