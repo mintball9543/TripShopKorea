@@ -1,7 +1,5 @@
 package com.example.tripshopkorea;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -12,9 +10,9 @@ import org.jsoup.select.Elements;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class QrCrawler implements Crawler {
+public class QrMyScanner implements MyScanner {
     @Override
-    public String ProductNameCrawler(String code) throws Exception {
+    public String GetProductName(String code) throws Exception {
         Document doc = Jsoup.connect(code).timeout(1000 * 10).get();
 
         // script 태그
@@ -44,7 +42,7 @@ public class QrCrawler implements Crawler {
     }
 
     @Override
-    public String ImageUrlCrawler(String code) throws Exception {
+    public String GetImageUrl(String code) throws Exception {
         Document doc = Jsoup.connect(code).timeout(1000 * 10).get();
 
         // script 태그
@@ -75,7 +73,7 @@ public class QrCrawler implements Crawler {
     }
 
     @Override
-    public String ProductGroupCrawler(String code) throws Exception {
+    public String GetProductGroup(String code) throws Exception {
         Document doc = Jsoup.connect(code).timeout(1000 * 10).get();
 
         // script 태그

@@ -4,12 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.example.tripshopkorea.databinding.ActSecondBinding;
-
-import org.jsoup.Jsoup;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -83,17 +80,17 @@ public class ProductInfoFetcher {
     }
 
     private String getImageUrl(String code) throws Exception {
-        Crawler crawler = ClawlingFactory.getClawler(code);
-        return crawler.ImageUrlCrawler(code);
+        MyScanner myScanner = MyScannerFactory.getClawler(code);
+        return myScanner.GetImageUrl(code);
     }
 
     private String getProductName(String code) throws Exception {
-        Crawler crawler = ClawlingFactory.getClawler(code);
-        return crawler.ProductNameCrawler(code);
+        MyScanner myScanner = MyScannerFactory.getClawler(code);
+        return myScanner.GetProductName(code);
     }
 
     private String getProductGroup(String code) throws Exception {
-        Crawler crawler = ClawlingFactory.getClawler(code);
-        return crawler.ProductGroupCrawler(code);
+        MyScanner myScanner = MyScannerFactory.getClawler(code);
+        return myScanner.GetProductGroup(code);
     }
 }
