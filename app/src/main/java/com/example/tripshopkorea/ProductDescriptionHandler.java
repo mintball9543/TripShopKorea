@@ -30,14 +30,10 @@ public class ProductDescriptionHandler implements ProductDescription.ProductDesc
             }
 
             @Override
-            public void onFailure(Throwable t) {
-                // Handle failure
-            }
+            public void onFailure(Throwable t) { }
         }, description, languageCode);
     }
 
     @Override
-    public void onFailure(Exception e) {
-        // Handle the error
-    }
+    public void onFailure(Exception e) { }
 }

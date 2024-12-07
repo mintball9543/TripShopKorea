@@ -14,8 +14,6 @@ import java.util.concurrent.Executors;
 public class ProductInfoFetcher {
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
     public Handler handler = new Handler(Looper.getMainLooper());
-    public String resultStr = "";
-    private String url = "https://www.koreannet.or.kr/front/koreannet/gtinSrch.do?gtin=";
     private Context context;
 
     public ProductInfoFetcher(Context context) {
@@ -43,9 +41,7 @@ public class ProductInfoFetcher {
                     }
 
                     @Override
-                    public void onFailure(Throwable t) {
-                        // Handle failure
-                    }
+                    public void onFailure(Throwable t) { }
                 }, productName, languageCode);
 
                 // 상품 카테고리 번역
@@ -57,9 +53,7 @@ public class ProductInfoFetcher {
                     }
 
                     @Override
-                    public void onFailure(Throwable t) {
-                        // Handle failure
-                    }
+                    public void onFailure(Throwable t) { }
                 }, productGroup, languageCode);
 
                 handler.post(() -> {

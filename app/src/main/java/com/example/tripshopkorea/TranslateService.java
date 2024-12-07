@@ -11,7 +11,4 @@ public interface TranslateService {
             @Query("target") String targetLanguage,
             @Query("key") String apiKey
     );
-
-    @GET("language/translate/v2/languages")
-    Call<GetLanguages> getLanguages(@Query("key") String apiKey);
 }

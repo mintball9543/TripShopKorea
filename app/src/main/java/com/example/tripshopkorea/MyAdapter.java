@@ -17,11 +17,9 @@ import java.util.ArrayList;
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     private ArrayList<PaintTitle> mDataset;
-    private Context context;
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public MyAdapter(ArrayList<PaintTitle> myDataset) {
-        //this.context = context;
         mDataset = myDataset;
     }
 

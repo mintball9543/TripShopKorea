@@ -10,7 +10,6 @@ public class ApiResponse {
     }
 
     public static class Message {
-        public String role;
         public String content;
     }
 }

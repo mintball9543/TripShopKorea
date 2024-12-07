@@ -64,35 +64,4 @@ public class Translation {
             }
         });
     }
-
-
-    public void getLanguages(TranslationCallback callback) {
-        Call<GetLanguages> call = service.getLanguages(apiKey);
-        call.enqueue(new Callback<GetLanguages>() {
-            @Override
-            public void onResponse(Call<GetLanguages> call, Response<GetLanguages> response) {
-                if (response.isSuccessful()) {
-                    GetLanguages languagesResponse = response.body();
-                    if (languagesResponse != null && languagesResponse.data.languages != null) {
-                        callback.onSuccess(languagesResponse.data.languages.toString());
-                    } else {
-                        Log.e("Translation", "Languages response or languages list is null");
-                        Log.e("Translation", "Response: " + response.toString()); // Print the entire response
-                    }
-                } else {
-                    Log.e("Translation", "Response not successful: " + response.code());
-                    try {
-                        Log.e("Translation", "Error body: " + response.errorBody().string());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetLanguages> call, Throwable t) {
-                Log.e("Translation", "Error", t);
-            }
-        });
-    }
 }
