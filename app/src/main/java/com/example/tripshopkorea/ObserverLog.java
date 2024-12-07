@@ -7,9 +7,8 @@ import android.util.Log;
 public class ObserverLog {
     static DatabaseHelper db;
 
-    // Constructor to accept Context
     public ObserverLog(Context context) {
-        db = new DatabaseHelper(context);
+        db = DatabaseHelper.getInstance(context);
     }
 
     //db 모두 출력하기

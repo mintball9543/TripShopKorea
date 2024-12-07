@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver{
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        db = new DatabaseHelper(this);
+        db = DatabaseHelper.getInstance(this);
         db.addObserver(this);
         loadRecyclerViewData();
 
@@ -68,32 +68,6 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver{
                 startBarcodeScan();
             }
         });
-
-        //언어 종류
-        /*new Translation().getLanguages(new TranslationCallback() {
-            @Override
-            public void onSuccess(String translatedText) {
-                Log.i("Translation callback", translatedText);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });*/
-        // 번역 테스트
-        /*new Translation().translateText(new TranslationCallback() {
-            @Override
-            public void onSuccess(String translatedText) {
-                Log.i("Translation callback", translatedText);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });*/
-
     }
 
     @Override
@@ -348,8 +322,8 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver{
                 Intent intent = new Intent(this, SecondAct.class);
                 intent.putExtra("name", "");
                 intent.putExtra("barcodeNumber", barcodeNumber);
-//                startActivity(intent);
-                startActivityForResult(intent,1);
+                startActivity(intent);
+//                startActivityForResult(intent,1);
             }
             else {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
@@ -361,14 +335,11 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver{
     }
 
     public void loadRecyclerViewData() {
-
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ArrayList<PaintTitle> myDataset = new ArrayList<PaintTitle>();
 
         // 아이템 추가
-//        db = new DatabaseHelper(this);
         Cursor res = db.getAllData();
 
         while (res.moveToNext()) {
@@ -395,13 +366,8 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver{
 
     @Override
     public void onDatabaseUpdated() {
-//        runOnUiThread(this::loadRecyclerViewData);
         loadRecyclerViewData();
         Log.i("onDatabaseUpdated", "Observer Pattern=================>");
     }
 
-    public void onResume() {
-        super.onResume();
-        onDatabaseUpdated();
-    }
 }
