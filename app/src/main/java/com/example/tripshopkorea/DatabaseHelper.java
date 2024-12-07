@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper implements Subject {
 
     public static final String DATABASE_NAME = "Barcode.db";
     public static final String TABLE_NAME = "barcodeTBL";
@@ -33,6 +33,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             instance = new DatabaseHelper(context.getApplicationContext());
         }
         return instance;
+    }
+
+    @Override
+    public void addObserver(DatabaseObserver observer) {
+        observers.add(observer);
+    }
+    @Override
+    public void removeObserver(DatabaseObserver observer) {
+        observers.remove(observer);
+    }
+    @Override
+    public void notifyObservers() {
+        for(DatabaseObserver observer : observers) {
+            observer.onDatabaseUpdated();
+        }
     }
 
     @Override
@@ -99,19 +114,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(rowDeleted > 0)
             notifyObservers();
         return rowDeleted;
-    }
-
-    public void addObserver(DatabaseObserver observer) {
-        observers.add(observer);
-    }
-
-    public void removeObserver(DatabaseObserver observer) {
-        observers.remove(observer);
-    }
-
-    public void notifyObservers() {
-        for(DatabaseObserver observer : observers) {
-            observer.onDatabaseUpdated();
-        }
     }
 }

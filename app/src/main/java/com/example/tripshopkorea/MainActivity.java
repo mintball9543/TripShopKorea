@@ -275,9 +275,7 @@ public class MainActivity extends AppCompatActivity implements DatabaseObserver{
                         final String[] name = {res.getString(1)};
                         final String[] group = {res.getString(2)};
                         final String[] description = {res.getString(3)};
-
                         Log.i("DB get data", id + " " + name[0] + " " + group[0] + " " + description[0]);
-
 
                         // DB 업데이트
                         new TranslateAndSave(MainActivity.this, id, name, group, description, languageCode).execute();
