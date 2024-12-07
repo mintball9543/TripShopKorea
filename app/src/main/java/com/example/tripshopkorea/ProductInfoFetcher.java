@@ -37,8 +37,8 @@ public class ProductInfoFetcher {
                 String languageCode = sharedPref.getString("languageCode", "en"); // Default is English
 
                 // 상품명 번역
-                Translation translation = new Translation();
-                translation.translateText(new TranslationCallback() {
+                Translation translation = Translation.getInstance(null, null, null, null, null, languageCode);
+                translation.translateText(new Translation.TranslationCallback() {
                     @Override
                     public void onSuccess(String translatedText) {
                         // Update the product name with the translated text
@@ -52,7 +52,7 @@ public class ProductInfoFetcher {
                 }, productName, languageCode);
 
                 // 상품 카테고리 번역
-                translation.translateText(new TranslationCallback() {
+                translation.translateText(new Translation.TranslationCallback() {
                     @Override
                     public void onSuccess(String translatedText) {
                         // Update the product group with the translated text
@@ -105,8 +105,7 @@ public class ProductInfoFetcher {
 
         if (!productGroup.trim().isEmpty()) {
             productGroup = productGroup.substring(productGroup.indexOf(" "));
-//            Log.i("productGroup", productGroup.toString());
-            return productGroup.trim().toString();
+            return productGroup.trim();
         } else {
             return "검색 결과 없음"; // errMsg
         }

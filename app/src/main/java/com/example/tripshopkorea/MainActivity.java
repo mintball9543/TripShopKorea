@@ -31,6 +31,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tripshopkorea.DatabaseHelper;
+import com.example.tripshopkorea.MyAdapter;
+import com.example.tripshopkorea.PaintTitle;
+import com.example.tripshopkorea.SecondAct;
+import com.example.tripshopkorea.Translation;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -55,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         loadRecyclerViewData();
 
@@ -66,51 +70,23 @@ public class MainActivity extends AppCompatActivity {
                 startBarcodeScan();
             }
         });
-
-        //언어 종류
-        /*new Translation().getLanguages(new TranslationCallback() {
-            @Override
-            public void onSuccess(String translatedText) {
-                Log.i("Translation callback", translatedText);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });*/
-        // 번역 테스트
-        /*new Translation().translateText(new TranslationCallback() {
-            @Override
-            public void onSuccess(String translatedText) {
-                Log.i("Translation callback", translatedText);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });*/
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_settings) {
             alertdialog();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    //언어 선택 다이얼로그
+    // 언어 선택 다이얼로그
     private void alertdialog() {
         AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
 
@@ -302,13 +278,12 @@ public class MainActivity extends AppCompatActivity {
 
                         Log.i("DB get data", id + " " + name[0] + " " + group[0] + " " + description[0]);
 
-
                         // DB 업데이트
-                        new TranslateAndSave(MainActivity.this, id, name, group, description, languageCode).execute();
+                        new Translation(MainActivity.this, id, name, group, description, languageCode).execute();
                     }
                     res.close();
 
-                    //SharedPreferences에 저장
+                    // SharedPreferences에 저장
                     SharedPreferences sharedPref = getSharedPreferences("MyPreferences", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("languageCode", languageCode);
@@ -329,10 +304,8 @@ public class MainActivity extends AppCompatActivity {
         dlg.show();
     }
 
-
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("onActivityResult", String.valueOf(requestCode));
         if (requestCode == 1) {
@@ -346,28 +319,23 @@ public class MainActivity extends AppCompatActivity {
                 String barcodeNumber = result.getContents();
                 Toast.makeText(this, "Barcode Number: " + barcodeNumber, Toast.LENGTH_LONG).show();
 
-                //Second_Act 호출
+                // Second_Act 호출
                 Intent intent = new Intent(this, SecondAct.class);
                 intent.putExtra("name", "");
                 intent.putExtra("barcodeNumber", barcodeNumber);
-//                startActivity(intent);
-                startActivityForResult(intent,1);
-            }
-            else {
+                startActivityForResult(intent, 1);
+            } else {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             }
-        }
-        else {
+        } else {
             Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
         }
     }
 
     public void loadRecyclerViewData() {
-
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        ArrayList<PaintTitle> myDataset = new ArrayList<PaintTitle>();
+        ArrayList<PaintTitle> myDataset = new ArrayList<>();
 
         // 아이템 추가
         db = new DatabaseHelper(this);
@@ -378,7 +346,6 @@ public class MainActivity extends AppCompatActivity {
                     res.getString(2), res.getString(3)));
         }
         res.close();
-
 
         recyclerView.setAdapter(new MyAdapter(myDataset));
     }
