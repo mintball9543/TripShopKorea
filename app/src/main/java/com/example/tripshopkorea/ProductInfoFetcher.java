@@ -80,17 +80,17 @@ public class ProductInfoFetcher {
     }
 
     private String getImageUrl(String code) throws Exception {
-        MyScanner myScanner = MyScannerFactory.getClawler(code);
+        MyScanner myScanner = MyScannerFactory.getScanner(code);
         return myScanner.GetImageUrl(code);
     }
 
     private String getProductName(String code) throws Exception {
-        MyScanner myScanner = MyScannerFactory.getClawler(code);
+        MyScanner myScanner = MyScannerFactory.getScanner(code);
         return myScanner.GetProductName(code);
     }
 
     private String getProductGroup(String code) throws Exception {
-        MyScanner myScanner = MyScannerFactory.getClawler(code);
+        MyScanner myScanner = MyScannerFactory.getScanner(code);
         return myScanner.GetProductGroup(code);
     }
 }
